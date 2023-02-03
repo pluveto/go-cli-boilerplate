@@ -61,6 +61,9 @@ package: all
 		rm -rfd $$ARCH_RELEASE_DIR; \
 	done
 
+test:
+	go test -v ./...
+
 clean:
 	rm -rfd dist
 

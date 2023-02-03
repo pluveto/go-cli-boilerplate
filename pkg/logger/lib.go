@@ -30,8 +30,8 @@ func (logger *CombinedLogger) GetLogger(index int) *logrus.Logger {
 	if index == 0 {
 		return logger.Logger
 	}
-	if index > len(logger.additionalLoggers) {
-		panic("index of logger out of range")
+	if index > len(logger.additionalLoggers) || index < 0 {
+		return nil
 	}
 	return logger.additionalLoggers[index-1]
 }
@@ -41,7 +41,7 @@ func (logger *CombinedLogger) Apply(index int, fn func(*logrus.Logger)) {
 		fn(logger.Logger)
 		return
 	}
-	if index > len(logger.additionalLoggers) {
+	if index > len(logger.additionalLoggers) || index < 0 {
 		panic("index of logger out of range")
 	}
 	fn(logger.additionalLoggers[index-1])
