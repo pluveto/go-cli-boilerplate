@@ -1,0 +1,27 @@
+# This workflow will test a golang project
+
+name: Go
+
+on:
+  push:
+    branches: [ "workflow-test" ]
+  pull_request:
+    branches: [ "workflow-test" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.19
+
+    - name: Build
+      run: go build -v cmd/greet/main.go
+
+    - name: Build
+      run: go build -v cmd/greet/main.go
+

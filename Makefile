@@ -1,5 +1,6 @@
 BIN_NAMES=greet
 GOARCHS=amd64 386 arm arm64
+GOARCHS_MAC=amd64 arm64
 
 dev: linux
 
@@ -8,31 +9,59 @@ default: all
 all: windows linux mac
 
 prepare:
-	@mkdir -p bin
+	@mkdir -p dist
 
 windows: prepare
-	GOOS=windows
-	
 	for BIN_NAME in $(BIN_NAMES); do \
+		[ -z "$$BIN_NAME" ] && continue; \
 		for GOARCH in $(GOARCHS); do \
-			GOOS=windows GOARCH=$$GOARCH go build -o bin/$$GOOS_$$GOARCH/$$BIN_NAME.exe cmd/$$BIN_NAME/main.go; \
+			mkdir -p dist/windows_$$GOARCH; \
+			OOSG=windows GOARCH=$$GOARCH go build -o dist/windows_$$GOARCH/$$BIN_NAME.exe cmd/$$BIN_NAME/main.go; \
 		done \
 	done
 
 linux: prepare
-	GOOS=linux
 	for BIN_NAME in $(BIN_NAMES); do \
+		[ -z "$$BIN_NAME" ] && continue; \
 		for GOARCH in $(GOARCHS); do \
-			GOOS=linux GOARCH=$$GOARCH go build -o bin/$$GOOS_$$GOARCH/$$BIN_NAME cmd/$$BIN_NAME/main.go; \
+			mkdir -p dist/linux_$$GOARCH; \
+			GOOS=linux GOARCH=$$GOARCH go build -o dist/linux_$$GOARCH/$$BIN_NAME cmd/$$BIN_NAME/main.go; \
 		done \
 	done
 
 mac: prepare
-	GOOS=darwin
 	for BIN_NAME in $(BIN_NAMES); do \
-		for GOARCH in $(GOARCHS); do \
-			GOOS=darwin GOARCH=$$GOARCH go build -o bin/$$GOOS_$$GOARCH/$$BIN_NAME cmd/$$BIN_NAME/main.go; \
+		[ -z "$$BIN_NAME" ] && continue; \
+		for GOARCH in $(GOARCHS_MAC); do \
+			mkdir -p dist/darwin_$$GOARCH; \
+			GOOS=darwin GOARCH=$$GOARCH go build -o dist/mac_$$GOARCH/$$BIN_NAME cmd/$$BIN_NAME/main.go; \
 		done \
 	done
 
-.PHONY: all, default
+package: all
+	for BIN_NAME in $(BIN_NAMES); do \
+		[ -z "$$BIN_NAME" ] && continue; \
+		for GOARCH in $(GOARCHS); do \
+			zip -q -r dist/$$BIN_NAME-windows-$$GOARCH.zip dist/windows_$$GOARCH/; \
+			zip -q -r dist/$$BIN_NAME-linux-$$GOARCH.zip dist/linux_$$GOARCH/; \
+		done \
+	done
+
+	for BIN_NAME in $(BIN_NAMES); do \
+		[ -z "$$BIN_NAME" ] && continue; \
+		for GOARCH in $(GOARCHS_MAC); do \
+			zip -q -r dist/$$BIN_NAME-mac-$$GOARCH.zip dist/darwin_$$GOARCH/; \
+		done \
+	done
+
+	# copy config to dist/*/
+	ARCH_RELEASE_DIRS=$$(find dist -type d -name "*_*"); \
+	for ARCH_RELEASE_DIR in $$ARCH_RELEASE_DIRS; do \
+		cp conf/config.default.toml $$ARCH_RELEASE_DIR/config.toml; \
+		rm -rfd $$ARCH_RELEASE_DIR; \
+	done
+
+clean:
+	rm -rfd dist
+
+.PHONY: all, default, clean
