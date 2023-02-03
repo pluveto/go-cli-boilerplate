@@ -4,9 +4,9 @@ name: Go
 
 on:
   push:
-    branches: [ "workflow-test" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "workflow-test" ]
+    branches: [ "main" ]
 
 jobs:
   build:
