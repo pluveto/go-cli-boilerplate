@@ -62,7 +62,7 @@ jobs:
           # The name of the tag
           tag_name:  ${{ github.event.inputs.tag }} 
           # The name of the release
-          release_name: Upgit ${{ github.event.inputs.tag }} 
+          release_name: ${{ github.event.inputs.tag }} 
           # Text describing the contents of the tag
           body: ${{ steps.changelog.outputs.changes }}
           # The path to the asset you want to upload
