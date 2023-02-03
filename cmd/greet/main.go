@@ -1,6 +1,9 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
+
 	"example.com/m/cmd/greet/app"
 	"example.com/m/pkg/logger"
 	"github.com/BurntSushi/toml"
@@ -29,9 +32,22 @@ func loadArgsValid() app.Args {
 	return args
 }
 
+func getAppDir() string {
+	dir, err := os.Executable()
+	if err != nil {
+		logger.Fatal(err)
+	}
+	return filepath.Dir(dir)
+}
+
 func loadConfValid(path string, defaultConf app.Conf, defaultConfPath string) app.Conf {
 	if path == "" {
 		path = defaultConfPath
+	}
+	// app executable dir + config.toml has the highest priority
+	preferredPath := filepath.Join(getAppDir(), path)
+	if _, err := os.Stat(preferredPath); err == nil {
+		path = preferredPath
 	}
 	_, err := toml.DecodeFile(path, &defaultConf)
 	if err != nil {
