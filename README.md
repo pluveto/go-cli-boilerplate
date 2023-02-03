@@ -35,13 +35,20 @@ Click `Use this template` button to create a new repository. Then clone the new 
     BIN_NAMES=app1 app2
     ```
 
-### Edit and Release
+4. Enable write permission for workflow
+    + Click `Settings` tab of your repository.
+    + Select `Action -> General` in left sidebar.
+    + Locate `Workflow permissions` section.
+    + Check `Read and write permission`
+
+### 3. Release
 
 1. Edit `README.md`. Switch `LICENSE` to your own license.
 2. Coding for your application.
 3. Run `make dev` to build for your local machine.
-4. Run `make package` to cross compile for different platforms.
-5. Click `Action` tab of your repository to see the Github Action workflow. In release workflow, click `Run workflow` button to release your application.
+4. Run `make test` to run unit tests.
+5. Run `make package` to cross compile for different platforms.
+6. Click `Action` tab of your repository to see the Github Action workflow. In release workflow, click `Run workflow` button to release your application.
 
 ## Run Example
 
