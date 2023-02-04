@@ -20,7 +20,7 @@ func main() {
 	args = loadArgsValid()
 	conf = loadConfValid(args.Config, defaultConf, "config.toml")
 
-	app.InitLogger(defaultConf.Log, args.Verbose)
+	app.InitLogger(conf.Log, args.Verbose)
 	logger.Debug("log level: ", logger.GetLevel())
 
 	app.Run(args, conf)
