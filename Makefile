@@ -33,7 +33,7 @@ mac: prepare
 	for BIN_NAME in $(BIN_NAMES); do \
 		[ -z "$$BIN_NAME" ] && continue; \
 		for GOARCH in $(GOARCHS_MAC); do \
-			mkdir -p dist/darwin_$$GOARCH; \
+			mkdir -p dist/mac_$$GOARCH; \
 			GOOS=darwin GOARCH=$$GOARCH go build -o dist/mac_$$GOARCH/$$BIN_NAME cmd/$$BIN_NAME/main.go; \
 		done \
 	done
@@ -50,7 +50,7 @@ package: all
 	for BIN_NAME in $(BIN_NAMES); do \
 		[ -z "$$BIN_NAME" ] && continue; \
 		for GOARCH in $(GOARCHS_MAC); do \
-			zip -q -r dist/$$BIN_NAME-mac-$$GOARCH.zip dist/darwin_$$GOARCH/; \
+			zip -q -r dist/$$BIN_NAME-mac-$$GOARCH.zip dist/mac_$$GOARCH/; \
 		done \
 	done
 
