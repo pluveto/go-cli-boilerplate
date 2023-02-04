@@ -58,6 +58,10 @@ package: all
 test:
 	go test -v ./...
 
+# Usage: make run APP=greet -- -h
+run:
+	go run cmd/$(APP)/main.go
+
 clean:
 	rm -rfd dist
 
