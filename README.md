@@ -11,7 +11,7 @@ Click `Use this template` button to create a new repository. Then clone the new 
 ### 2. Do some changes
 
 1. Change the package name
-    + Replace `your.package.name` with your own package name.
+    + Replace `example.com/m` with your own package name.
     + The default is `example.com/m` You can replace by `sed`:
 
     ```bash
