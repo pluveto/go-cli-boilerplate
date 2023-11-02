@@ -25,6 +25,7 @@ Click `Use this template` button to create a new repository. Then clone the new 
     + Rename `cmd/greet` to `cmd/YOUR_APP_NAME`
     + Rename inside `Makefile` for `BIN_NAMES`
     + Rename inside `conf/*.toml` for logger file name
+    + Rename inside `cmd/greet/app/conf.go` for `Name` constasnt
     + Rename insdie `.vscode` for debugging
 
 3. Add more application if needed
@@ -62,6 +63,7 @@ go run cmd/greet/main.go Jack -v -c ./dist/config.example.toml
 + [x] Multiple logging output: file, stdout, stderr
 + [x] Command line args, such as `--verbose` and `--config`
 + [x] Config file, such as `./dist/config.example.toml`
++ [x] Find config file in current directory and home directory (~/.config/APP_NAME/config.toml)
 + [x] Log rotation
 
 Use `| jq` to pretty print JSON log.
