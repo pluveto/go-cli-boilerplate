@@ -6,7 +6,7 @@ import (
 	"example.com/m/pkg/logger"
 )
 
-func Run(args Args, conf Conf) {
+func Run(args Args, _ Conf) {
 	logger.Warn("initialize this project")
 	if args.Seperately {
 		for _, name := range args.Names {

@@ -40,19 +40,37 @@ func getAppDir() string {
 	return filepath.Dir(dir)
 }
 
-func loadConfValid(path string, defaultConf app.Conf, defaultConfPath string) app.Conf {
-	if path == "" {
-		path = defaultConfPath
+// loadConfValid loads the configuration from the given path.
+// If the path is empty, the defaultConfPath is used.
+// If the path is relative, the app executable dir is prepended.
+//
+// Example
+func loadConfValid(configFileName string, defaultConf app.Conf, defaultConfPath string) app.Conf {
+	if configFileName == "" {
+		configFileName = defaultConfPath
 	}
-	// app executable dir + config.toml has the highest priority
-	preferredPath := filepath.Join(getAppDir(), path)
-	if _, err := os.Stat(preferredPath); err == nil {
-		path = preferredPath
-	}
+	path := findSuitablePath(configFileName)
+
 	_, err := toml.DecodeFile(path, &defaultConf)
 	if err != nil {
-		logger.Warn("failed to load config file: ", err, " using default config")
+		logger.Info("failed to load config file: ", err, " using default config")
 	}
 	logger.WithField("conf", &defaultConf).Debug("configuration loaded")
 	return defaultConf
+}
+
+func findSuitablePath(configFileName string) string {
+	path := ""
+	// app executable dir + config.toml has the highest priority
+	preferredPath := filepath.Join(getAppDir(), configFileName)
+	if _, err := os.Stat(preferredPath); err == nil {
+		path = preferredPath
+	}
+	if len(path) == 0 {
+		preferredPathUserConfig := filepath.Join(os.Getenv("HOME"), ".config", app.Name, configFileName)
+		if _, err := os.Stat(preferredPathUserConfig); err == nil {
+			path = preferredPathUserConfig
+		}
+	}
+	return path
 }

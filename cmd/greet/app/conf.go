@@ -1,7 +1,8 @@
 package app
 
-
 import "github.com/sirupsen/logrus"
+
+const Name = "greet"
 
 type Conf struct {
 	Log Log `toml:"log"`
